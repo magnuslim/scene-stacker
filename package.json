@@ -1,0 +1,23 @@
+{
+  "name": "scene-stacker",
+  "version": "1.0.0",
+  "description": "a scenario testing tool to help building scenes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/magnuslim/scene-stacker.git"
+  },
+  "keywords": [
+    "test",
+    "scenario"
+  ],
+  "author": "Magnus Lim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magnuslim/scene-stacker/issues"
+  },
+  "homepage": "https://github.com/magnuslim/scene-stacker#readme"
+}
