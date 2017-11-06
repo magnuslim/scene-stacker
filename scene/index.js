@@ -21,11 +21,14 @@ module.exports = class {
     }
 
     get lastStep() {
-        return this._completedSteps[this._completedSteps.length-1];
+        return this.stepsBeforeCurrent[this.stepsBeforeCurrent.length-1];
     }
 
     get stepsBeforeCurrent() {
-        return this._subScenes.map(scene => scene.steps).concat(this._completedSteps);
+        
+        let allSteps = this._subScenes.reduce((allSteps, currentScene) => allSteps.concat(currentScene.stepsBeforeCurrent), []);
+        allSteps = allSteps.concat(this._completedSteps);
+        return allSteps;
     }
 
     addStep(step) {
