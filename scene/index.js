@@ -29,7 +29,7 @@ module.exports = class {
     }
 
     addStep(step) {
-        let stepDesc = new StepDescriber(step);
+        let stepDesc = new StepDescriber(step, this._context);
         this._allSteps.push(stepDesc);
     }
 

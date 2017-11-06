@@ -1,6 +1,6 @@
 {
   "name": "scene-stacker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a scenario testing tool to help building scenes.",
   "main": "index.js",
   "scripts": {
