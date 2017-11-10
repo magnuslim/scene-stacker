@@ -1,12 +1,12 @@
 const assert = require('assert');
-const StepDescriber = require('../step/describer');
-const StepExecuter = require('../step/executer');
+const Step = require('../step');
+const Executer = require('../executer');
 
 let topScene = undefined;
 
 module.exports = class Scene{
-    constructor(desc) {
-        this.executer = StepExecuter.create();
+    constructor(desc, executer) {
+        this.executer = executer;
         this.desc = desc;
         this._subScenes = [];
         this._allSteps = [];
@@ -41,19 +41,19 @@ module.exports = class Scene{
     }
 
     addStep(step) {
-        let stepDesc = new StepDescriber(step);
+        let stepDesc = new Step(step);
         this._allSteps.push(stepDesc);
     }
 
-    loadScene(scene) {
+    loadScene(scene, executer = this.executer) {
         assert(scene instanceof Scene, 'Scene.loadScene(): expect param tobe instanceof Scene.');
-        this._subScenes.push(scene.clone());
+        this._subScenes.push(scene.clone(executer));
     }
 
     async runSubScenes(top = true) {
         if(top) topScene = this;
         for(let subScene of this._subScenes) {
-            subScene.executer = this.executer;
+            //subScene.executer = this.executer;
             subScene._parent = this;
             await subScene.runSubScenes(false);
             await subScene.run(false);
@@ -68,10 +68,10 @@ module.exports = class Scene{
         }
     }
 
-    clone() {
-        let newScene = new Scene(this.desc);
+    clone(executer = this.executer) {
+        let newScene = new Scene(this.desc, executer);
         newScene._allSteps = this._allSteps.map(step => step.clone());
-        newScene._subScenes = this._subScenes.map(scene => scene.clone());
+        newScene._subScenes = this._subScenes.map(scene => scene.clone(executer));
         newScene._completedSteps = [];
         return newScene;
     }

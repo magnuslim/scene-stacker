@@ -1,5 +1,5 @@
 let Executer = class {
-    run(apiName, request)  {throw new Error('must implement function executer.run(apiName, request)')}
+    async run(apiName, request)  {throw new Error('must implement function executer.run(apiName, request)')}
 };
 
 module.exports = {

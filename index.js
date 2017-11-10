@@ -1,9 +1,9 @@
 const Scene = require('./scene');
-const StepExecuter = require('./step/executer');
+const Executer = require('./executer');
 
 module.exports = {
-    setExecuter: executerClass => StepExecuter.setClass(executerClass),
-    createScene: desc => new Scene(desc)
+    setExecuter: executerClass => Executer.setClass(executerClass),
+    createScene: desc => new Scene(desc, Executer.create())
 };
 
 //todo set context in scene.
