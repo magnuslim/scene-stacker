@@ -1,5 +1,5 @@
-const Scene = require('./scene');
-const Executer = require('./executer');
+const Scene = require('./src/scene');
+const Executer = require('./src/executer');
 
 module.exports = {
     setExecuter: executerClass => Executer.setClass(executerClass),
