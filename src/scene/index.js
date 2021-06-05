@@ -1,53 +1,27 @@
 const assert = require('assert');
 const Step = require('../step');
 const Executer = require('../executer');
+const compile = require('./compile');
 
-let topScene = undefined;
-
-module.exports = class Scene{
-    constructor(desc, executer) {
+module.exports = class Scene {
+    constructor(definition, executer) {
+        let {name, steps} = compile(definition);
+        this.name = name;
+        this.steps = steps;
         this.executer = executer;
-        this.desc = desc;
-        this._subScenes = [];
-        this._allSteps = [];
-        this._completedSteps = [];
     }
 
     get timeout() {
         return this._allSteps.map(step => step.timeout).reduce((total, current) => total + current, 0);
     }
 
-    get subScenesTimeout() {
+    get prerequisitesTimeout() {
         let allSteps = this._subScenes.map(scene => scene._allSteps).reduce((total, current) => total.concat(current), []);
         return allSteps.map(step => step.timeout).reduce((total, current) => total + current, 0);
     }
 
-    _lastStep() {
-        return this._stepsBeforeCurrent()[this._stepsBeforeCurrent().length-1];
-    }
-
-    _stepsBeforeCurrent() {
-        let allSteps = this._subScenes.reduce((allSteps, currentScene) => allSteps.concat(currentScene._stepsBeforeCurrent()), []);
-        allSteps = allSteps.concat(this._completedSteps);
-        return allSteps;
-    }
-
-    get lastStep() {
-        return topScene._lastStep();
-    }
-
-    get stepsBeforeCurrent() {
-        return topScene._stepsBeforeCurrent();
-    }
-
-    addStep(step) {
-        let stepDesc = new Step(step);
-        this._allSteps.push(stepDesc);
-    }
-
-    loadScene(scene, executer = this.executer) {
-        assert(scene instanceof Scene, 'Scene.loadScene(): expect param tobe instanceof Scene.');
-        this._subScenes.push(scene.clone(executer));
+    async init() {
+        
     }
 
     async runSubScenes(top = true) {
@@ -66,14 +40,6 @@ module.exports = class Scene{
             await step.exec(this.executer);
             this._completedSteps.push(step);
         }
-    }
-
-    clone(executer = this.executer) {
-        let newScene = new Scene(this.desc, executer);
-        newScene._allSteps = this._allSteps.map(step => step.clone());
-        newScene._subScenes = this._subScenes.map(scene => scene.clone(executer));
-        newScene._completedSteps = [];
-        return newScene;
     }
 }
 
